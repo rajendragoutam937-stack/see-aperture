@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7f8fc"><title>Aperture Vision — AI Visual Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/"><img class="brand-logo" src="/logo.svg" alt=""><span>APERTURE<span class="brand-light">VISION</span></span></a>
+    <div class="top-actions"><span class="status-pill"><i id="statusDot"></i><span id="statusText">Checking AI…</span></span><button class="icon-button info-button" id="infoBtn" aria-label="About Aperture Vision">i</button><button class="icon-button" id="themeBtn" aria-label="Toggle theme">☾</button></div>
+  </header>
+  <main class="vision-layout">
+    <section class="visual-panel panel">
+      <div class="stage" id="stage">
+        <div class="stage-status" id="stageStatus"><i></i><span id="stageStatusText">Camera is off</span></div>
+        <div class="empty-state" id="emptyState"><div class="upload-symbol">◉</div><h2>See the world around you</h2><p>Start your camera or upload a picture to begin.</p><button class="primary-button" id="emptyCameraBtn">Start camera</button><label class="secondary-button upload-inline" for="imageInput">Upload picture</label></div>
+        <video id="cameraVideo" autoplay playsinline muted hidden></video><img id="previewImage" alt="Uploaded visual" hidden><canvas id="detectCanvas" hidden></canvas>
+        <div class="stage-corner-label" id="stageCornerLabel" hidden>LIVE OBJECT DETECTION</div>
+      </div>
+      <div class="visual-controls">
+        <button class="secondary-button stop-button" id="stopCameraBtn" disabled>■ Stop camera</button>
+        <label class="secondary-button upload-button" for="imageInput">↑ Upload picture</label>
+        <input id="imageInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+        <button class="secondary-button" id="detectBtn" disabled>⌖ Detect objects</button>
+        <button class="secondary-button" id="clearBtn">Clear</button>
+      </div>
+      <div class="detection-footer"><div><span class="mini-label">OBJECTS DETECTED</span><strong id="objectCount">0</strong></div><div class="detection-list" id="detectionList">Waiting for camera or image</div></div>
+    </section>
+    <aside class="assistant-panel panel">
+      <div class="assistant-top"><div><div class="assistant-title"><span class="chat-icon">●</span><h2>AI Chatbot</h2></div><span class="assistant-subtitle" id="chatContext">Ask about anything you see.</span></div><div class="online-indicator"><i></i> Online</div><button class="clear-chat" id="clearChatBtn">Clear</button></div>
+      <div class="chat-messages" id="chatMessages"><div class="message assistant-message"><div class="avatar">✦</div><div class="bubble">Hi! I'm Aperture Vision. Start your camera or upload a picture, then ask me about the objects and scene. I can also answer general questions.</div></div></div>
+      <div class="suggestions"><button class="suggestion">What can you see?</button><button class="suggestion">Describe the scene</button></div>
+      <form class="composer" id="chatForm"><textarea id="chatInput" rows="1" placeholder="Ask anything…" aria-label="Ask Aperture Vision"></textarea><button class="mic-button" type="button" id="micBtn" title="Voice input">⌁</button><button class="send-button" type="submit" aria-label="Send">➤</button></form>
+      <div class="chat-footnote">AI can make mistakes. Verify important information.</div>
+    </aside>
+  </main>
+  <footer><span>APERTURE VISION</span><span>Made by Chirayu &amp; Davin · Powered by Groq</span></footer>
+</div>
+<section class="info-modal" id="infoModal" aria-hidden="true"><div class="info-backdrop" id="infoBackdrop"></div><div class="info-dialog" role="dialog" aria-modal="true" aria-labelledby="infoTitle"><button class="info-close" id="infoClose" aria-label="Close">×</button><img class="about-logo" src="/logo.svg" alt=""><p class="info-modal-eyebrow">ABOUT THE PLATFORM</p><h2 id="infoTitle">What is Aperture Vision?</h2><p>Aperture Vision is an AI visual assistant. Use your camera or upload a picture to detect objects and ask questions about what is visible.</p><div class="info-detail"><h3>Live vision</h3><p>Object detection runs continuously in your browser while the camera is active. When you ask a question, the current camera frame is sent to Groq Vision for visual understanding.</p></div><div class="info-detail"><h3>Image understanding</h3><p>Upload a picture to detect common objects and ask the AI assistant about its contents.</p></div><p class="info-note">AI responses and object detection may be inaccurate.</p></div></section>
+<div class="toast" id="toast" role="status"></div>
+</body></html>
